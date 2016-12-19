@@ -7,15 +7,16 @@ export const randomInt = (min, max) => {
 
 // set language from html tag and load content file
 
-export const SetLanguage = () => {
-  window.lang = document.getElementsByTagName('html')[0].getAttribute('lang') || 'en';
-  console.log('   - lang: ' + window.lang);
+export const getLanguage = () => {
+  const lang = document.getElementsByTagName('html')[0].getAttribute('lang') || 'en';
+  console.log('   - lang: ' + lang);
+  return lang
 }
 
 
 // set platform by browser's userAgent
 
-export const SetPlatform = () => {
+export const getPlatform = () => {
   function detectPlatform() {
     if (navigator.userAgent.match(/Android/i)
     || navigator.userAgent.match(/webOS/i)
@@ -25,16 +26,17 @@ export const SetPlatform = () => {
     || navigator.userAgent.match(/BlackBerry/i)
     || navigator.userAgent.match(/Windows Phone/i)
     ) {
-      return 'smartphone';
+      return 'MOBILE';
     } else if (navigator.userAgent.match(/iPad/i)) {
-      return 'tablet';
+      return 'TABLET';
     } else {
-      return 'desktop';
+      return 'DESKTOP';
     }
   }
 
-  window.platform = detectPlatform();
-  console.log('   - platform: ' + window.platform);
+  const platform = detectPlatform();
+  console.log('   - platform: ' + platform);
+  return platform;
 }
 
 
@@ -49,9 +51,6 @@ export const SetCookieState = () => {
     var match = document.cookie.match(RegExp('(?:^|;\\s*)' + escape(name) + '=([^;]*)'));
     return match ? match[1] : null;
   }
-
-
-
 
 
   // keep this as separate function for later refactor

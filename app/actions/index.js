@@ -1,15 +1,4 @@
-export const openPopup = (data) => {
-  return {
-    type: 'POPUP_OPEN',
-    data
-  }
-}
-
-export const closePopup = () => {
-  return {
-    type: 'POPUP_CLOSE',
-  }
-}
+// grid
 
 export const updateGrid = (data) => { // tiles
   console.log('updating grid...', data)
@@ -25,6 +14,30 @@ export const updateTile = (data) => { // x, y
     type: 'TILE_UPDATE',
     data
   }
+}
+
+// popup
+
+export const openPopup = (data) => {
+  return {
+    type: 'POPUP_OPEN',
+    data
+  }
+}
+
+export const closePopup = () => {
+  return {
+    type: 'POPUP_CLOSE',
+  }
+}
+
+
+// enums
+
+export const Devices = {
+  DESKTOP: 'DESKTOP',
+  TABLET: 'TABLET',
+  MOBILE: 'MOBILE'
 }
 
 // outline possible states and events

@@ -1,18 +1,16 @@
-//require('./fonts.scss');
-//require('./style.scss');
-
 import React from 'react'
 import { connect } from 'react-redux'
-import { SetLanguage, SetPlatform } from '../../utils/utils'
+import { getLanguage, getPlatform } from '../../utils/utils'
 
-import Grid from '../Grid/Grid'
+import Grid from './Grid'
 
 
 let App = ({ dispatch }) => {
 
+  // TODO: Use redux to store this in the application state
   console.log('Initializing App:')
-  SetLanguage();
-  SetPlatform();
+  const lang = getLanguage()
+  const device = getPlatform()
 
   return (
     <div className='app'>

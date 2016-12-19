@@ -45,7 +45,6 @@ export class Grid extends Component {
     return data
   }
 
-
   createTiles () {
     const { width, height } = this.props
     const tiles = []
@@ -64,11 +63,8 @@ export class Grid extends Component {
       }
     }
 
-
-
     return tiles;
   }
-
 
   onClick(e) {
     //console.log('clicked on tile', this.props.id)
@@ -89,7 +85,6 @@ export class Grid extends Component {
     //console.log('touchmove', this.state.mouseIsDown)
     //this.setState({ selected: !this.state.selected })
   }
-
 
   render() {
     return (

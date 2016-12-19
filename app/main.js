@@ -25,7 +25,6 @@ window.reduxDebug = true;
 
 if (window.reduxDebug === true) {
 	// override dispatch for logging: http://redux.js.org/docs/advanced/Middleware.html
-
 	let next = store.dispatch
 	store.dispatch = function dispatchAndLog(action) {
 		console.log('dispatching', action) // eslint-disable-line
