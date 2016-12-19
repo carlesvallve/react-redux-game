@@ -11,9 +11,18 @@ export const closePopup = () => {
   }
 }
 
-export const updateGrid = (data) => {
+export const updateGrid = (data) => { // tiles
+  console.log('updating grid...', data)
   return {
     type: 'GRID_UPDATE',
+    data
+  }
+}
+
+export const updateTile = (data) => { // x, y
+  console.log('updating tile...', data)
+  return {
+    type: 'TILE_UPDATE',
     data
   }
 }

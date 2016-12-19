@@ -1,3 +1,15 @@
+//@import "variables/colors";
+@import "fonts";
+@import "tile";
+
+
+$tile-normal: white;
+$tile-selected: lightgrey;
+
+:export { tileNormal: $tile-normal; }
+:export { tileSelected: $tile-selected; }
+
+
 body {
   margin: 0;
   padding: 0;
@@ -16,15 +28,10 @@ body {
   background: #eee;
   box-shadow: 0 0 8px 1px rgba(25,25,25,.3);
 
-  position: absolute;
-  margin: auto;
-  top: 10px;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-
-  max-width: 720px;
-  min-height: auto; //780px;
+  position: relative;
+  max-width: 480px;
+  min-height: auto;
+  margin: 0;
 
   cursor: default;
 }
@@ -35,12 +42,8 @@ body {
   text-align: center;
   box-shadow: 0 0 8px 1px rgba(25,25,25,.3);
 
-  position: absolute;
-  margin: auto;
-  top:10px;
-  left: 10px;
-  right: 10px;
-
+  position: relative;
+  margin: 0 auto 10px auto;
   height: 60px;
 }
 
@@ -50,13 +53,19 @@ body {
   text-align: center;
   box-shadow: 0 0 8px 1px rgba(25,25,25,.3);
 
-  position: absolute;
-  margin: auto;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-
+  position: relative;
+  margin: 10px auto 0 auto;
   height: 60px;
+}
+
+.grid {
+  position: relative;
+  margin: auto auto;
+
+  .tiles {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .canvas-app {

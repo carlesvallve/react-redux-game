@@ -12,6 +12,10 @@ import { createStore }  from 'redux'
 import reducers from './reducers'
 import App from './components/App/App'
 
+// require all sass files - sub files should be SASS imported in main
+import styles from './styles/main.scss';
+//require('./styles/main.scss')
+
 
 // create store
 let store = createStore(reducers) //, initialState

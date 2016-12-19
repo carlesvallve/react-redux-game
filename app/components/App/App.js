@@ -1,16 +1,11 @@
-require('./fonts.scss');
-require('./style.scss');
+//require('./fonts.scss');
+//require('./style.scss');
 
 import React from 'react'
+import { connect } from 'react-redux'
 import { SetLanguage, SetPlatform } from '../../utils/utils'
 
 import Grid from '../Grid/Grid'
-
-import SpriteCanvas from '../SpriteCanvas/SpriteCanvas'
-// import Conrad from '../Conrad/Conrad'
-
-import { connect } from 'react-redux'
-//import { refreshList } from '../actions'
 
 
 let App = ({ dispatch }) => {
@@ -19,22 +14,13 @@ let App = ({ dispatch }) => {
   SetLanguage();
   SetPlatform();
 
-
   return (
-    <div className='canvas-app'>
-      <SpriteCanvas>
-        {/*<Conrad/>*/}
-      </SpriteCanvas>
+    <div className='app'>
+      <div className='header'>HEADER</div>
+      <Grid width={5} height={7} />
+      <div className='footer'>FOOTER</div>
     </div>
   )
-
-  // return (
-  //   <div className='app'>
-  //     <div className='header'>HEADER</div>
-  //     <Grid width={7} height={7} />
-  //     <div className='footer'>FOOTER</div>
-  //   </div>
-  // )
 }
 
 export default connect()(App)

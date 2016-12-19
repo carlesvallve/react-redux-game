@@ -1,71 +1,118 @@
-require('./style.scss');
-
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { updateGrid } from '../../actions'
 
-import Tile from '../Tile/Tile'
-import Player from '../Player/Player'
+import Tile from './Tile'
 
-import { randomInt } from '../../utils/utils'
-import randomColor from '../../utils/randomColor'
-
-
-class Grid extends Component {
+export class Grid extends Component {
 
   constructor(props) {
     super(props)
 
-    this.state = { tiles: this.createTiles() }
-    this.props.dispatch(updateGrid(this.state))
+    this.state = {
+      tiles: this.createTilesData()
+    }
+
+    props.updateGrid(this.state)
+  }
+
+  // componentDidMount() {
+  //   this.setState({ tiles: this.createTiles() })
+  //   this.props.updateGrid(this.state)
+  // }
+
+  setDimensions() {
+    const { width, height } = this.props
+    const ratio = height / width
+    const w = Math.min(screen.width, 480) - 10 // - (width - 1) * 4
+    const h = Math.floor(w * ratio)
+    return { width: w + 'px', height: h + 'px' }
+  }
+
+  createTilesData() {
+    const { width, height } = this.props
+    let data = []
+
+    for (var y = 0; y < height; y++) {
+      data[y] = []
+      for (var x = 0; x < width; x++) {
+        data[y][x] = {
+          selected: false
+        }
+      }
+    }
+
+    return data
   }
 
 
   createTiles () {
-    var tiles = []
+    const { width, height } = this.props
+    const tiles = []
 
-    var colors = randomColor({
-      count: 9,
-      hue: 'monochrome',
-      luminosity: 'bright'
-    })
-
-    for (var y = 0; y < this.props.height; y++) {
+    for (var y = 0; y < height; y++) {
       tiles[y] = []
-      for (var x = 0; x < this.props.width; x++) {
+      for (var x = 0; x < width; x++) {
         tiles[y][x] = <Tile
-          key={x + '_' + y} x={x} y={y}
-          style={{
-            width: (100 / this.props.width) + '%',
-            height: (100 / this.props.height) + '%'
-          }}
-          color={colors[randomInt(0, colors.length - 1)]}
+          key={x + '_' + y}
+          id={x + '_' + y}
+          x={x}
+          y={y}
+          width={100 / width}
+          height={100 / height}
         />
       }
     }
+
+
 
     return tiles;
   }
 
 
+  onClick(e) {
+    //console.log('clicked on tile', this.props.id)
+    //this.setState({ selected: !this.state.selected })
+  }
+
+  onTouchStart(e) {
+    //console.log('touchstart', this.props.id)
+    //this.setState({ mouseIsDown: true })
+  }
+
+  onTouchEnd(e) {
+    //console.log('touchend', this.props.id)
+    //this.setState({ mouseIsDown: false })
+  }
+
+  onTouchMove(e) {
+    //console.log('touchmove', this.state.mouseIsDown)
+    //this.setState({ selected: !this.state.selected })
+  }
+
+
   render() {
     return (
-      <div className='grid'>
-        <div className='tiles'>{this.state.tiles}</div>
-
+      <div className='grid' style={this.setDimensions()}>
+        <div className='tiles'
+          onTouchStart = {this.onTouchStart.bind(this)}
+          onTouchEnd = {this.onTouchEnd.bind(this)}
+          onTouchMove = {this.onTouchMove.bind(this)}
+        >
+          {this.createTiles()}
+        </div>
       </div>
     )
   }
 }
 
-// const mapStateToProps = (state, ownProps) => {
-//   if (state.grid.active === undefined) {
-//     state.grid.active = ownProps.active
-//   }
-//   return state.grid
-// }
 
-export default connect(null, null)(Grid)
+function mapStateToProps(state) {
+  return state.grid
+}
+
+export default connect(mapStateToProps, { updateGrid })(Grid);
+
 
 
 // randomColor({
@@ -73,4 +120,10 @@ export default connect(null, null)(Grid)
 //   //luminosity: 'light',
 //   hue: 'monochrome',
 //   format: 'rgb'
+// })
+
+// var colors = randomColor({
+//   count: 9,
+//   hue: 'monochrome',
+//   luminosity: 'bright'
 // })
