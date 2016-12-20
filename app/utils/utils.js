@@ -9,15 +9,15 @@ export const randomInt = (min, max) => {
 
 export const getLanguage = () => {
   const lang = document.getElementsByTagName('html')[0].getAttribute('lang') || 'en';
-  console.log('   - lang: ' + lang);
+  //console.log('   - lang: ' + lang);
   return lang
 }
 
 
 // set platform by browser's userAgent
 
-export const getPlatform = () => {
-  function detectPlatform() {
+export const getDevice = () => {
+  function detectDevice() {
     if (navigator.userAgent.match(/Android/i)
     || navigator.userAgent.match(/webOS/i)
     || navigator.userAgent.match(/iPhone/i)
@@ -34,9 +34,9 @@ export const getPlatform = () => {
     }
   }
 
-  const platform = detectPlatform();
-  console.log('   - platform: ' + platform);
-  return platform;
+  const device = detectDevice();
+  //console.log('   - device: ' + device);
+  return device;
 }
 
 

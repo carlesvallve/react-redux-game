@@ -1,7 +1,26 @@
+// app
+
+export const setLanguage = (data) => { // en, zh
+  //console.log('updating language...', data)
+  return {
+    type: 'SET_LANGUAGE',
+    data
+  }
+}
+
+export const setDevice = (data) => { // DESKTOP, TABLET, MOBILE
+  //console.log('updating device...', data)
+  return {
+    type: 'SET_DEVICE',
+    data
+  }
+}
+
+
 // grid
 
 export const updateGrid = (data) => { // tiles
-  console.log('updating grid...', data)
+  //console.log('updating grid...', data)
   return {
     type: 'GRID_UPDATE',
     data
@@ -9,7 +28,7 @@ export const updateGrid = (data) => { // tiles
 }
 
 export const updateTile = (data) => { // x, y
-  console.log('updating tile...', data)
+  //console.log('updating tile...', data)
   return {
     type: 'TILE_UPDATE',
     data
@@ -29,46 +48,4 @@ export const closePopup = () => {
   return {
     type: 'POPUP_CLOSE',
   }
-}
-
-
-// enums
-
-export const Devices = {
-  DESKTOP: 'DESKTOP',
-  TABLET: 'TABLET',
-  MOBILE: 'MOBILE'
-}
-
-// outline possible states and events
-export const GameState = {
-  INIT: 'INIT',
-  WELCOME: 'WELCOME',
-  START: 'START',
-  PLAY: 'PLAY',
-  PAUSE: 'PAUSE',
-  END: 'END',
-  GAME_OVER: 'GAME_OVER',
-}
-
-// just examples..
-// Conrad has more animation states
-// but possibly basic logic states could be like this?
-export const PlayerState = {
-  WALK: 'WALK',
-  MOVE: 'MOVE',
-  CLIMB: 'CLIMB',
-  SHOOT: 'SHOOT',
-  JUMP: 'JUMP',
-  DUCK: 'DUCK',
-  GET_ITEM: 'GET_ITEM',
-  USE_ITEM: 'USE_ITEM'
-}
-
-export const Trump = {
-  TWEET: 'TWEET'
-}
-
-export const NPCState = {
-
 }

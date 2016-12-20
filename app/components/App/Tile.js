@@ -12,22 +12,11 @@ export class Tile extends Component {
 
   onTouchStart(e) {
     // dispatch to redux
-    this.props.updateTile({
-      x: this.props.x,
-      y: this.props.y,
-      selected: !this.props.selected
-    })
-  }
-
-  onTouchEnd(e) {
-    //console.log('touchend', this.props.id)
-    //this.setState({ selected: !this.state.selected })
-  }
-
-  onTouchMove(e) {
-    //console.log('touchmove', this.props.id)
-    //this.setState({ selected: !this.state.selected })
-    //console.log(this.props.mouseIsDown)
+    // this.props.updateTile({
+    //   x: this.props.x,
+    //   y: this.props.y,
+    //   selected: !this.props.selected
+    // })
   }
 
   render() {
@@ -37,7 +26,6 @@ export class Tile extends Component {
     return (
       <div className='tile'
         style={{ width: width + '%', height: height + '%' }}
-        onTouchStart = {this.onTouchStart.bind(this)}
       >
         <div className='tile-inner' style={{ backgroundColor: color }}>
           <div className='tile-info'>{x + ',' + y}</div>
@@ -46,6 +34,7 @@ export class Tile extends Component {
     )
   }
 }
+
 
 function mapStateToProps(state, ownProps) {
   return state.grid.tiles[ownProps.y][ownProps.x]

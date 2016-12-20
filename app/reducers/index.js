@@ -1,15 +1,15 @@
 import { combineReducers } from 'redux'
-import device from './device'
+import settings from './settings'
 import gameState from './gameState'
 import grid from './grid'
-import popup from './popup'
+//import popup from './popup'
 
 
 const reducers = combineReducers({
-  device,
+  settings,
   gameState,
   grid,
-  popup
+  //popup
 })
 
 export default reducers
