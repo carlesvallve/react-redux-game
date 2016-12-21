@@ -1,16 +1,29 @@
 import React, { Component } from 'react'
+import Sound from 'react-sound'
+
 import { connect } from 'react-redux'
 import { updateGrid, updateTile } from '../../actions'
 
+// import Sound from 'react-sound'
+// import Sfx from './Sfx'
+
 import Tile from './Tile'
+
 
 export class Grid extends Component {
 
   constructor(props) {
     super(props)
 
+    this.sounds = []
     this.state = { tiles: this.createTilesData() }
     this.currentTile = undefined
+
+    console.log('>>>>>>>>>>>>>', window.Audio)
+
+    // this.sounds = {
+    //   alert: <Sfx url="../../assets/audio/sms-alert.mp3" /> //<Sound url="../../assets/audio/sms-alert.mp3" playStatus={Sound.status.STOPPED} />
+    // }
 
     props.updateGrid(this.state)
   }
@@ -157,6 +170,8 @@ export class Grid extends Component {
 
     // update current tile
     this.currentTile = tile
+
+    //this.sounds.push(<Sound url={'../../assets/audio/bling.mp3'} playStatus={Sound.status.PLAYING} />)
   }
 
 
@@ -165,6 +180,11 @@ export class Grid extends Component {
   // ==============================================
 
   render() {
+
+    // const soundMap = this.sounds.map((item, key) =>
+    //   {item}
+    // )
+
     return (
       <div className='grid' style={this.setDimensions()}>
         <div className='tiles'
@@ -174,7 +194,10 @@ export class Grid extends Component {
           onTouchEnd = {this.onTouchEnd.bind(this)}
         >
           {this.createTiles()}
+
         </div>
+
+        {/*<ul>{soundMap}</ul>*/}
       </div>
     )
   }
@@ -201,3 +224,12 @@ export default connect(mapStateToProps, { updateGrid, updateTile })(Grid);
 //   hue: 'monochrome',
 //   luminosity: 'bright'
 // })
+
+// <Sound
+//   url="cool_sound.mp3"
+//   playStatus={Sound.status.PLAYING}
+//   playFromPosition={300 /* in milliseconds */}
+//   onLoading={this.handleSongLoading}
+//   onPlaying={this.handleSongPlaying}
+//   onFinishedPlaying={this.handleSongFinishedPlaying}
+// />

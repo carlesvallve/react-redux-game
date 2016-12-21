@@ -1,13 +1,17 @@
 import React                        from 'react'
 import { connect }                  from 'react-redux'
+import Audio                        from './Audio'
 import Grid                         from './Grid'
 
 
 let App = ({ dispatch }) => {
+
   return (
     <div className='app'>
+      {window.audio}
+
       <div className='header'>HEADER</div>
-      <Grid width={5} height={7} />
+      <Grid width={7} height={9} />
       <div className='footer'>FOOTER</div>
     </div>
   )

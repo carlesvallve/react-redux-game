@@ -1,6 +1,7 @@
 import styles from '../../styles/main.scss';
 
 import React, { Component } from 'react'
+import Sound from 'react-sound'
 import { connect } from 'react-redux'
 import { updateTile } from '../../actions'
 
@@ -8,28 +9,33 @@ import { updateTile } from '../../actions'
 export class Tile extends Component {
   constructor(props) {
     super(props)
+
+    this.selected = null
   }
 
-  onTouchStart(e) {
-    // dispatch to redux
-    // this.props.updateTile({
-    //   x: this.props.x,
-    //   y: this.props.y,
-    //   selected: !this.props.selected
-    // })
-  }
 
   render() {
     const { x, y, width, height } = this.props
-    const color = this.props.selected ? styles.tileSelected : styles.tileNormal
+    const tileClass = 'tile-inner ' + (this.props.selected ? 'wall' : 'floor')
 
     return (
       <div className='tile'
         style={{ width: width + '%', height: height + '%' }}
       >
-        <div className='tile-inner' style={{ backgroundColor: color }}>
+        <div className={tileClass} >
           <div className='tile-info'>{x + ',' + y}</div>
         </div>
+
+        {/*
+        <Sound
+          url={'../../assets/audio/alert.mp3'}
+          playStatus={ this.props.selected ? Sound.status.PLAYING : Sound.status.PAUSED }
+          multiShot={true}
+          multiShotEvents={false}
+          streaming={false}
+        />
+        */}
+
       </div>
     )
   }
