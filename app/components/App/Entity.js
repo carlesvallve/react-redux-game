@@ -8,25 +8,34 @@ export class Entity extends Component {
     super(props)
 
     this.debugInfo = true;
+
+    this.style={
+      width: props.width + '%',
+      height: props.height + '%',
+    }
+  }
+
+  moveTo(x, y) {
+    const px = (x * this.props.width) * this.props.grid.props.width
+    const py = (y * this.props.height) * this.props.grid.props.height
+
+    this.style = Object.assign({}, this.style, {
+      transform: 'translate3d(' + px + '%, ' + py + '%, 0)',
+      transition: 'transform .2s ease-in-out'
+    })
   }
 
 
   render() {
-    const { x, y, width, height } = this.props
-    const className = 'entity-inner'
+    const { x, y } = this.props
+    this.moveTo(x, y)
 
     return (
       <div className='entity'
-        style={{
-          width: width + '%',
-          height: height + '%',
-          left: (x * width * 1) + '%',
-          top: (y * height * 0.9925) + '%'
-        }}
-        x={x}
-        y={y}
+        style={this.style}
+        x={x} y={y}
       >
-        <div className={className}>
+        <div className='entity-inner'>
           <div
             className='entity-info'
             style={{visibility : this.debugInfo ? 'visible' : 'hidden'}}>

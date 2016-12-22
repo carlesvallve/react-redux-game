@@ -102,6 +102,7 @@ export class Grid extends Component {
         y={data.y}
         width={100 / this.props.width}
         height={100 / this.props.height}
+        grid={this}
       />
     )
   }
