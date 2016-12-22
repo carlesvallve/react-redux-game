@@ -7,14 +7,24 @@ const grid = (state = {}, action) => {
       return Object.assign(state, action.data)
 
       case 'TILE_UPDATE':
-        let tileData = state.tiles
-        tileData[action.data.y][action.data.x] = Object.assign(
-          {},
-          tileData[action.data.y][action.data.x],
-          {selected: action.data.selected}
+      // update given tile at x,y with new params
+        state.tiles[action.data.y][action.data.x] = Object.assign({},
+          state.tiles[action.data.y][action.data.x],
+          { selected: action.data.selected }
         )
-        //console.log('updating tile reducer...', tileData)
-        return Object.assign({}, state, {tiles: tileData})
+
+        //console.log('updating tile reducer...', state.tiles)
+        return Object.assign({}, state, {tiles: state.tiles})
+
+        case 'ENTITY_UPDATE':
+          // update given id entity with new params
+          state.entities[action.data.id] = Object.assign({},
+            state.entities[action.data.id],
+            { x: action.data.x, y: action.data.y }
+          )
+
+          //console.log('updating entity reducer...', state.entities)
+          return Object.assign({}, state, {entities: state.entities})
 
     default:
       return state

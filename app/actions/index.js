@@ -35,6 +35,14 @@ export const updateTile = (data) => { // x, y
   }
 }
 
+export const updateEntity = (data) => { // num, x, y
+  //console.log('updating tile...', data)
+  return {
+    type: 'ENTITY_UPDATE',
+    data
+  }
+}
+
 // popup
 
 export const openPopup = (data) => {

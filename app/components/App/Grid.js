@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import Sound from 'react-sound'
 
 import { connect } from 'react-redux'
-import { updateGrid, updateTile } from '../../actions'
+import { updateGrid, updateTile, updateEntity } from '../../actions'
 
 // import Sound from 'react-sound'
 // import Sfx from './Sfx'
 
 import Tile from './Tile'
-
+import Entity from './Entity'
 
 export class Grid extends Component {
 
@@ -16,16 +16,27 @@ export class Grid extends Component {
     super(props)
 
     this.sounds = []
-    this.state = { tiles: this.createTilesData() }
+    this.state = {
+      tiles: this.createTilesData(),
+      entities: {
+        'player': {id: 'player', x: 0, y: 0}
+      }
+    }
     this.currentTile = undefined
 
-    console.log('>>>>>>>>>>>>>', window.Audio)
+    //console.log('>>>>>>>>>>>>>', window.Audio)
 
     // this.sounds = {
     //   alert: <Sfx url="../../assets/audio/sms-alert.mp3" /> //<Sound url="../../assets/audio/sms-alert.mp3" playStatus={Sound.status.STOPPED} />
     // }
 
     props.updateGrid(this.state)
+
+    props.updateEntity({
+      id: this.state.entities.player.id,
+      x: this.state.entities.player.x,
+      y: this.state.entities.player.y
+    })
   }
 
 
@@ -80,20 +91,29 @@ export class Grid extends Component {
     return tiles;
   }
 
+  createEntity(id) {
+    const data = this.state.entities[id]
+
+    return (
+      <Entity
+        key={data.id}
+        id={data.id}
+        x={data.x}
+        y={data.y}
+        width={100 / this.props.width}
+        height={100 / this.props.height}
+      />
+    )
+  }
 
   // ==============================================
   // Interaction
   // ==============================================
 
-  onClick(e) {
-    //console.log('clicked on tile', this.props.id)
-    //const { x, y } = this.getMousePos(e, false)
-  }
-
   onTouchStart(e) {
-    //console.log('touchstart', this.props.id)
     const { x, y } = this.getMousePos(e, true)
     const tile = this.getTileAtMousePos(x, y)
+
     this.updateTile(tile)
   }
 
@@ -122,19 +142,14 @@ export class Grid extends Component {
   }
 
   getTileAtMousePos(x, y) {
-    // get element under point
+    // get element under given position
     const elm = document.elementFromPoint(x, y);
     if (elm === null) { return undefined }
 
-    // get dom label text
-    const name = elm.firstChild.innerHTML
-    if (name === undefined) { return undefined }
-
-    // convert name to numeric coordinates
-    const arr = name.split(',')
-    const tileX = parseInt(arr[0])
-    const tileY = parseInt(arr[1])
-    if (isNaN(tileX) || isNaN(tileY)) { return undefined }
+    // get x,y from element attributes
+    const tileX = elm.getAttribute('x')
+    const tileY = elm.getAttribute('y')
+    if (tileX === null || tileY === null) { return undefined }
 
     // get tile from coordinates
     const tile = this.state.tiles[tileY][tileX]
@@ -187,14 +202,19 @@ export class Grid extends Component {
 
     return (
       <div className='grid' style={this.setDimensions()}>
+
+        {/* tiles */}
         <div className='tiles'
-          onClick = {this.onClick.bind(this)}
           onTouchStart = {this.onTouchStart.bind(this)}
           onTouchMove = {this.onTouchMove.bind(this)}
           onTouchEnd = {this.onTouchEnd.bind(this)}
         >
           {this.createTiles()}
+        </div>
 
+        {/* entities */}
+        <div className='entities'>
+          {this.createEntity('player')}
         </div>
 
         {/*<ul>{soundMap}</ul>*/}
@@ -208,7 +228,7 @@ function mapStateToProps(state) {
   return state.grid
 }
 
-export default connect(mapStateToProps, { updateGrid, updateTile })(Grid);
+export default connect(mapStateToProps, { updateGrid, updateTile, updateEntity })(Grid);
 
 
 
