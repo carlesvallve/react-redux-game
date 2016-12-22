@@ -17,7 +17,12 @@ export class Entity extends Component {
 
     return (
       <div className='entity'
-        style={{ width: width + '%', height: height + '%' }}
+        style={{
+          width: width + '%',
+          height: height + '%',
+          left: (x * width * 1) + '%',
+          top: (y * height * 0.9925) + '%'
+        }}
         x={x}
         y={y}
       >

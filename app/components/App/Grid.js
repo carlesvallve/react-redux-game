@@ -114,14 +114,15 @@ export class Grid extends Component {
     const { x, y } = this.getMousePos(e, true)
     const tile = this.getTileAtMousePos(x, y)
 
-    this.updateTile(tile)
+    this.updateEntity('player', tile.x, tile.y)
+    //this.updateTile(tile)
   }
 
   onTouchMove(e) {
     //console.log('touchmove', this.state.mouseIsDown)
-    const { x, y } = this.getMousePos(e, true)
-    const tile = this.getTileAtMousePos(x, y)
-    this.updateTile(tile)
+    // const { x, y } = this.getMousePos(e, true)
+    // const tile = this.getTileAtMousePos(x, y)
+    // this.updateTile(tile)
   }
 
   onTouchEnd(e) {
@@ -187,6 +188,10 @@ export class Grid extends Component {
     this.currentTile = tile
 
     //this.sounds.push(<Sound url={'../../assets/audio/bling.mp3'} playStatus={Sound.status.PLAYING} />)
+  }
+
+  updateEntity(id, x, y) {
+    this.props.updateEntity({id: id, x: x, y: y})
   }
 
 
