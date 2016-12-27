@@ -6,6 +6,10 @@ import Grid                         from './Grid'
 
 let App = ({ dispatch }) => {
 
+  //var json = require('./map01.json')
+  //const data = JSON.parse(json)
+  //console.log(json, data)
+
   return (
     <div className='app'>
       {window.audio}
