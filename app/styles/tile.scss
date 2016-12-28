@@ -27,6 +27,11 @@
   background: #AAA;
 }
 
+.tile-inner.path {
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.8);
+  background: yellow;
+}
+
 // NOTE: for some reason, we need to write text for tile vertical separations to be correct. why!?
 
 .tile-info {

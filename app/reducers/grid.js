@@ -10,7 +10,7 @@ const grid = (state = {}, action) => {
       // update given tile at x,y with new params
         state.tiles[action.data.y][action.data.x] = Object.assign({},
           state.tiles[action.data.y][action.data.x],
-          { selected: action.data.selected }
+          { type: action.data.type }
         )
 
         //console.log('updating tile reducer...', state.tiles)
@@ -23,7 +23,7 @@ const grid = (state = {}, action) => {
             { x: action.data.x, y: action.data.y }
           )
 
-          console.log('updating entity reducer...', state.entities)
+          //console.log('updating entity reducer...', state.entities)
           return Object.assign({}, state, {entities: state.entities})
 
     default:

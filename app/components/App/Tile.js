@@ -1,9 +1,20 @@
 import styles from '../../styles/main.scss';
 
 import React, { Component } from 'react'
-import Sound from 'react-sound'
 import { connect } from 'react-redux'
 import { updateTile } from '../../actions'
+
+// const TileTypes = {
+//   FLOOR: 0,
+//   WALL: 1,
+//   PATH: 2
+// }
+
+const TileClasses = {
+  0: 'floor',
+  1: 'wall',
+  2: 'path'
+}
 
 
 export class Tile extends Component {
@@ -11,14 +22,13 @@ export class Tile extends Component {
     super(props)
 
     this.debugInfo = false;
-    this.selected = null
-
+    this.type = null
   }
 
 
   render() {
     const { x, y, width, height } = this.props
-    const tileClass = 'tile-inner ' + (this.props.selected ? 'wall' : 'floor')
+    const tileClass = 'tile-inner ' + TileClasses[this.props.type] // + TileClasses[TileTypes[this.props.type]] //(this.props.type === 1 ? 'wall' : 'floor')
 
     return (
       <div className='tile'
@@ -33,17 +43,6 @@ export class Tile extends Component {
             {x + ',' + y}
           </div>
         </div>
-
-        {/*
-        <Sound
-          url={'../../assets/audio/alert.mp3'}
-          playStatus={ this.props.selected ? Sound.status.PLAYING : Sound.status.PAUSED }
-          multiShot={true}
-          multiShotEvents={false}
-          streaming={false}
-        />
-        */}
-
       </div>
     )
   }

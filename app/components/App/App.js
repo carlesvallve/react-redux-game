@@ -1,29 +1,21 @@
 import React                        from 'react'
 import { connect }                  from 'react-redux'
-import Audio                        from './Audio'
 import Grid                         from './Grid'
 
 
 let App = ({ dispatch }) => {
 
-  const data = require('json!./map02.json');
-
-
-  //var json = require('./map01.json')
-  //const data = JSON.parse(json)
+  // load map data
+  const data = require('json!../../assets/data/map01.json');
   console.log(data)
 
   return (
     <div className='app'>
-      {window.audio}
-
       <div className='header'>HEADER</div>
-      <Grid map={data.map}/>
+      <Grid data={data}/>
       <div className='footer'>FOOTER</div>
     </div>
   )
 }
 
 export default connect()(App)
-
-// width={7} height={9} 
