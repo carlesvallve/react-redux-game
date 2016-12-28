@@ -23,7 +23,7 @@ const grid = (state = {}, action) => {
             { x: action.data.x, y: action.data.y }
           )
 
-          //console.log('updating entity reducer...', state.entities)
+          console.log('updating entity reducer...', state.entities)
           return Object.assign({}, state, {entities: state.entities})
 
     default:

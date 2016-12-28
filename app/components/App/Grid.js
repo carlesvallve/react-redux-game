@@ -15,7 +15,12 @@ export class Grid extends Component {
   constructor(props) {
     super(props)
 
-    this.sounds = []
+    // record grid dimensions for future use
+    const { map } = props
+    this.width = map[0].length
+    this.height = map.length
+
+
     this.state = {
       tiles: this.createTilesData(),
       entities: {
@@ -25,7 +30,7 @@ export class Grid extends Component {
     this.currentTile = undefined
 
     //console.log('>>>>>>>>>>>>>', window.Audio)
-
+    // this.sounds = []
     // this.sounds = {
     //   alert: <Sfx url="../../assets/audio/sms-alert.mp3" /> //<Sound url="../../assets/audio/sms-alert.mp3" playStatus={Sound.status.STOPPED} />
     // }
@@ -45,7 +50,7 @@ export class Grid extends Component {
   // ==============================================
 
   setDimensions() {
-    const { width, height } = this.props
+    const { width, height } = this
     const ratio = height / width
     const w = Math.min(screen.width, 480) - 10
     const h = Math.floor(w * ratio)
@@ -53,14 +58,14 @@ export class Grid extends Component {
   }
 
   createTilesData() {
-    const { width, height } = this.props
+    const { width, height } = this
     let data = []
 
     for (var y = 0; y < height; y++) {
       data[y] = []
       for (var x = 0; x < width; x++) {
         data[y][x] = {
-          selected: false,
+          selected: (this.props.map[y][x] === 1 ? true : false),
           x: x,
           y: y
         }
@@ -71,7 +76,7 @@ export class Grid extends Component {
   }
 
   createTiles () {
-    const { width, height } = this.props
+    const { width, height } = this
     const tiles = []
 
     for (var y = 0; y < height; y++) {
@@ -92,16 +97,17 @@ export class Grid extends Component {
   }
 
   createEntity(id) {
-    const data = this.state.entities[id]
+    const { width, height } = this
+    const entityData = this.state.entities[id]
 
     return (
       <Entity
-        key={data.id}
-        id={data.id}
-        x={data.x}
-        y={data.y}
-        width={100 / this.props.width}
-        height={100 / this.props.height}
+        key={entityData.id}
+        id={entityData.id}
+        x={entityData.x}
+        y={entityData.y}
+        width={100 / width}
+        height={100 / height}
         grid={this}
       />
     )
@@ -114,7 +120,6 @@ export class Grid extends Component {
   onTouchStart(e) {
     const { x, y } = this.getMousePos(e, true)
     const tile = this.getTileAtMousePos(x, y)
-
     this.updateEntity('player', tile.x, tile.y)
     //this.updateTile(tile)
   }
@@ -192,6 +197,7 @@ export class Grid extends Component {
   }
 
   updateEntity(id, x, y) {
+    console.log('updateEntity', x, y, id)
     this.props.updateEntity({id: id, x: x, y: y})
   }
 

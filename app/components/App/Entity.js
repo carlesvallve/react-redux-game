@@ -16,8 +16,8 @@ export class Entity extends Component {
   }
 
   moveTo(x, y) {
-    const px = (x * this.props.width) * this.props.grid.props.width
-    const py = (y * this.props.height) * this.props.grid.props.height
+    const px = (x * this.props.width) * this.props.grid.width
+    const py = (y * this.props.height) * this.props.grid.height
 
     this.style = Object.assign({}, this.style, {
       transform: 'translate3d(' + px + '%, ' + py + '%, 0)',

@@ -6,19 +6,24 @@ import Grid                         from './Grid'
 
 let App = ({ dispatch }) => {
 
+  const data = require('json!./map02.json');
+
+
   //var json = require('./map01.json')
   //const data = JSON.parse(json)
-  //console.log(json, data)
+  console.log(data)
 
   return (
     <div className='app'>
       {window.audio}
 
       <div className='header'>HEADER</div>
-      <Grid width={7} height={9} />
+      <Grid map={data.map}/>
       <div className='footer'>FOOTER</div>
     </div>
   )
 }
 
 export default connect()(App)
+
+// width={7} height={9} 
