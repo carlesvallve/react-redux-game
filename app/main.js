@@ -9,6 +9,7 @@ import reducers 										from './reducers'
 import { getLanguage, getDevice }   from './utils/utils'
 import { setLanguage, setDevice }   from './actions'
 import App 													from './components/App/App'
+import Simple from './components/Three/Simple'
 
 
 // create store
@@ -34,7 +35,7 @@ store.dispatch(setDevice(getDevice()))
 // render application
 render(
   <Provider store={store}>
-    <App />
+    <Simple />
   </Provider>,
   document.getElementById('root')
 )

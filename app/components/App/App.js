@@ -12,7 +12,7 @@ let App = ({ dispatch }) => {
   return (
     <div className='app'>
       <div className='header'>HEADER</div>
-      <Grid data={data}/>
+      <Grid data={{data}}/>
       <div className='footer'>FOOTER</div>
     </div>
   )
