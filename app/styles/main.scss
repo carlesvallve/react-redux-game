@@ -21,6 +21,15 @@ body {
   font-family: 'konigsberg';
 }
 
+
+#three-box canvas {
+    display: block;
+    margin: auto;
+    padding: 0;
+    border : 0;
+}
+
+
 * {
   box-sizing: border-box;
 }
