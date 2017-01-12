@@ -3,7 +3,11 @@ import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 import ReactDOM from 'react-dom';
 
+var StereoEffect = require('three-stereo-effect')(THREE)
+
+
 import Camera from './Camera'
+import Lights from './Lights'
 import Grid from './Grid'
 import Video from './Video'
 
@@ -11,6 +15,10 @@ import Video from './Video'
 class Simple extends React.Component {
   constructor(props, context) {
     super(props, context);
+
+    console.log('Initializing Simple...', new THREE.StereoCamera())
+
+    //this.controls = new OrbitControls(this.camera)
 
     // var size = 10;
     // var divisions = 10;
@@ -30,7 +38,8 @@ class Simple extends React.Component {
     this.planePosition = new THREE.Vector3(0, 0, 0)
 
     //this.texture = THREE.ImageUtils.loadTexture('../../assets/img/url.png')
-    //this.renderer = new THREE.WebGLRenderer();
+    //this.renderer2 = new THREE.WebGLRenderer();
+    //console.log('>>>', this.renderer2)
 
     // create video element
     // this.video = document.createElement('video')
@@ -47,10 +56,10 @@ class Simple extends React.Component {
     // this.videoTexture = new THREE.VideoTexture( this.video );
     // this.videoTexture.minFilter =  THREE.NearestFilter
 
-    this.state = {
-      cubeRotation: new THREE.Euler(),
-      //cameraPosition: new THREE.Vector3(0, 1, 10)
-    };
+    // this.state = {
+    //   cubeRotation: new THREE.Euler(),
+    //   //cameraPosition: new THREE.Vector3(0, 1, 10)
+    // };
 
     this._onAnimate = () => {
       // we will get this callback every frame
@@ -58,19 +67,36 @@ class Simple extends React.Component {
       // pretend cubeRotation is immutable.
       // this helps with updates and pure rendering.
       // React will be sure that the rotation has now updated.
-      this.setState({
-        cubeRotation: new THREE.Euler(
-          this.state.cubeRotation.x + 0.025,
-          this.state.cubeRotation.y + 0.025,
-          0
-        )
-      });
+      // this.setState({
+      //   cubeRotation: new THREE.Euler(
+      //     this.state.cubeRotation.x + 0.025,
+      //     this.state.cubeRotation.y + 0.025,
+      //     0
+      //   )
+      // });
 
       //Every time the video got enougth data to be display, the texture is updated and sent to the GPU.
       // if(this.video.readyState === this.video.HAVE_ENOUGH_DATA ){
       //   this.videoTexture.needsUpdate = true;
       // }
+
+      this.stereoEffect.render(this.myScene, this.myCamera)
     };
+  }
+
+  componentDidMount() {
+    const renderer = this.refs.react3._canvas.userData.markup.childrenMarkup[0].threeObject._renderer
+    console.log('React3 renderer:', renderer) //canvas.userData.markup.childrenMarkup[0].threeObject._renderer);
+    renderer.setClearColor(0xffffff, 1.0)
+
+    this.stereoEffect = new StereoEffect(renderer)
+    this.stereoEffect.eyeSeparation = 10;
+    this.stereoEffect.setSize( window.innerWidth, window.innerHeight );
+    //
+    // console.log(stereoEffect)
+    this.myScene = this.refs.scene
+    this.myCamera = this.refs.camera.refs.cameraL
+    console.log(this.myScene, this.myCamera)
   }
 
   render() {
@@ -84,32 +110,19 @@ class Simple extends React.Component {
     return (
 
       <React3
-        mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
-        width={width}
-        height={height}
+        ref="react3"
+        mainCamera="cameraL" // this points to the perspectiveCamera which has the name set to "camera" below
+        width={width} height={height}
         onAnimate={this._onAnimate}
-        antialias={true}
+        antialias={false}
       >
-      <scene fog={new THREE.Fog( 0x000000, 0.1, 30 )}>
+      <scene ref='scene'>
 
-        <Camera />
+        <Camera ref='camera' renderer={this.renderer} />
+        <Lights />
         <Grid />
         <Video />
 
-        <mesh
-          rotation={this.state.cubeRotation}
-          position = {new THREE.Vector3(-5, 3, 0)}
-        >
-          <boxGeometry
-            width={1}
-            height={1}
-            depth={1}
-          />
-          <meshBasicMaterial map={this.videoTexture} />
-        </mesh>
-
-        <directionalLight color={0xFFFFFF} intensity={20} position={new THREE.Vector3(3, 3, 3)} />
-        <pointLight color={0xffffff} intensity={3} position={new THREE.Vector3(0, 1, 0)}/>
       </scene>
     </React3>);
   }
@@ -118,3 +131,17 @@ class Simple extends React.Component {
 export default Simple
 
 //ReactDOM.render(<Simple/>, document.body);
+
+//fog={new THREE.Fog( 0x000000, 0.1, 30 )}
+
+// <mesh
+//   rotation={this.state.cubeRotation}
+//   position = {new THREE.Vector3(-5, 3, 0)}
+// >
+//   <boxGeometry
+//     width={1}
+//     height={1}
+//     depth={1}
+//   />
+//   <meshBasicMaterial map={this.videoTexture} />
+// </mesh>

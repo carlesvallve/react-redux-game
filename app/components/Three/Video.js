@@ -7,10 +7,12 @@ class Video extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    console.log('Initializing video...')
 
-    this.glowTex = THREE.ImageUtils.loadTexture('../../assets/img/glowbox_256x256.png')
-    this.glowTex.wrapS = this.glowTex.wrapT = THREE.RepeatWrapping
-    this.glowTex.repeat.set( 41, 41 )
+
+    // this.glowTex = THREE.ImageUtils.loadTexture('../../assets/img/glowbox_256x256.png')
+    // this.glowTex.wrapS = this.glowTex.wrapT = THREE.RepeatWrapping
+    // this.glowTex.repeat.set( 41, 41 )
 
     // create video element
     this.video = document.createElement('video')
@@ -31,8 +33,8 @@ class Video extends React.Component {
   render() {
 
     return (
-      <mesh position={new THREE.Vector3(0, 1, 0)}>
-        <planeGeometry width={5} height={5 * this.ratio} />
+      <mesh position={new THREE.Vector3(0, 3, 0)}>
+        <planeGeometry width={2} height={2 * this.ratio} />
         <meshBasicMaterial
           map={this.videoTexture}
         />

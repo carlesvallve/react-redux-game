@@ -7,29 +7,100 @@ class Grid extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    console.log('Initializing grid...')
 
-    this.glowTex = THREE.ImageUtils.loadTexture('../../assets/img/glowbox_256x256.png')
-    this.glowTex.wrapS = this.glowTex.wrapT = THREE.RepeatWrapping
-    this.glowTex.repeat.set( 41, 41 )
+    const size = 16
+
+    const geometry = (
+      <planeGeometry
+        width={size} height={size} widthSegments={size} heightSegments={size}
+      />
+    )
+
+    const texture = THREE.ImageUtils.loadTexture('../../assets/img/glowbox_128x128.png')
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping
+    texture.repeat.set( size, size )
+
+    const material = (
+      <meshBasicMaterial
+        map={texture} side={THREE.DoubleSide} transparent={true} wireframe={false}
+      />
+    )
+
+
+    // for (var z = 0; z < size; z++) {
+    //
+    // }
+
+
+    this.positions = [
+      new THREE.Vector3(0, -size / 2, 0),
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(0, size / 2, 0)
+    ]
+
+    this.positions2 = [
+      new THREE.Vector3(0, 0, -size / 2),
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(0, 0, size / 2),
+    ]
+
+    this.positions3 = [
+      new THREE.Vector3(-size / 2, 0),
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(size / 2, 0),
+    ]
+
+
+    this.PlaneZ = (props) => {
+      return (
+        <mesh key={props.index + 'z'} position={props.position}
+          rotation={new THREE.Euler(THREE.Math.degToRad(-90), 0, 0)}>
+          {geometry}
+          {material}
+        </mesh>
+      )
+    }
+
+    this.PlaneY = (props) => {
+      return (
+        <mesh key={props.index + 'y'} position={props.position}
+          rotation={new THREE.Euler(THREE.Math.degToRad(0), 0, 0)}>
+          {geometry}
+          {material}
+        </mesh>
+      )
+    }
+
+    this.PlaneX = (props) => {
+      return (
+        <mesh key={props.index + 'x'} position={props.position}
+          rotation={new THREE.Euler(0, THREE.Math.degToRad(90), 0)}>
+          {geometry}
+          {material}
+        </mesh>
+      )
+    }
   }
 
   render() {
-
     return (
-      <mesh position={new THREE.Vector3(0, -1, 0)} rotation={new THREE.Euler(THREE.Math.degToRad(-90), 0, 0)}>
-        <planeGeometry width={21} height={21} widthSegments={21} heightSegments={21}/>
-        <meshPhongMaterial
-          map={this.glowTex}
-          transparent={true}
-          opacity={1}
+      <group>
+        {this.positions.map((position, index) =>
+          <this.PlaneZ key={index + 'z'} position={position} />
+        )}
 
-          emissiveMap={this.glowTex}
-          emissive={0x000000}
-          emissiveIntensity={1}
-        />
-      </mesh>
+        {this.positions2.map((position, index) =>
+            <this.PlaneY key={index + 'y'} position={position} />
+        )}
+
+        {this.positions3.map((position, index) =>
+            <this.PlaneX key={index + 'x'} position={position} />
+        )}
+      </group>
     )
   }
+
 }
 
 export default Grid
