@@ -6,8 +6,8 @@ import Grid                         from './Grid'
 let App = ({ dispatch }) => {
 
   // load map data
-  const data = require('json!../../assets/data/map01.json');
-  console.log(data)
+  // const data = require('json!../../assets/data/map01.json');
+  // console.log(data)
 
   return (
     <div className='app'>

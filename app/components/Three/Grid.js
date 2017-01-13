@@ -7,8 +7,6 @@ class Grid extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    console.log('Initializing grid...')
-
     const size = 5
 
     const geometry = (
@@ -17,8 +15,7 @@ class Grid extends React.Component {
       />
     )
 
-    //const texture = THREE.ImageUtils.loadTexture('../../assets/img/glowsquare-green-solid.png')
-    const texture = THREE.ImageUtils.loadTexture('../../assets/img/glowbox_128x128.png')
+    const texture = new THREE.TextureLoader().load('/vr-assets/img/glowbox_128x128.png')
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping
     texture.repeat.set( size, size )
 

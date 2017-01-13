@@ -8,10 +8,9 @@ import { randomInt } from '../../utils/utils'
 class Cube extends React.Component {
   constructor(props, context) {
     super(props, context);
-    console.log('Initializing cube...')
 
     // set video texture
-    this.videoTexture = this.createVideoTexture('../../assets/video/' + props.url + '.mp4')
+    this.videoTexture = this.createVideoTexture('/vr-assets/video/' + props.url + '.mp4')
   }
 
   createVideoTexture(url) {
@@ -46,10 +45,18 @@ class Cube extends React.Component {
     return (
       <mesh position={this.props.position}>
         <boxGeometry width={this.props.width} height={this.props.height} depth={this.props.depth}/>
-        <meshStandardMaterial map={this.videoTexture} side={THREE.DoubleSide} />
+        <meshStandardMaterial
+          map={this.videoTexture} side={THREE.DoubleSide}
+
+
+        />
       </mesh>
     )
   }
 }
 
 export default Cube
+
+// emissiveMap={this.videoTexture}
+// emissive = {0xffffff}
+// emissiveIntensity = {1}

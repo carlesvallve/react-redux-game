@@ -7,13 +7,6 @@ class Video extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    console.log('Initializing video...')
-
-
-    // this.glowTex = THREE.ImageUtils.loadTexture('../../assets/img/glowbox_256x256.png')
-    // this.glowTex.wrapS = this.glowTex.wrapT = THREE.RepeatWrapping
-    // this.glowTex.repeat.set( 41, 41 )
-
     // create video element
     this.video = document.createElement('video')
     //this.video.crossOrigin = ''

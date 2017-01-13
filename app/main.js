@@ -1,5 +1,5 @@
 // require all sass files - sub files should be SASS imported in main
-import styles from './styles/main.scss';
+//import styles from './styles/main.scss';
 
 import React 												from 'react'
 import { render } 									from 'react-dom'

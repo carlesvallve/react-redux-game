@@ -3,9 +3,11 @@ import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 import ReactDOM from 'react-dom';
 
+window.THREE = THREE // we need to do this in order to use DeviceOrientationControls, sadly
+
 var Stats = require('stats-js')
 var OrbitControls = require('three-orbit-controls')(THREE)
-//var DeviceOrientationControls = require('device-orientation-controls')(THREE)
+var DeviceOrientationControls = require('device-orientation-controls')
 var StereoEffect = require('three-stereo-effect')(THREE)
 
 
@@ -20,17 +22,13 @@ import { randomInt } from '../../utils/utils'
 class Simple extends React.Component {
   constructor(props, context) {
     super(props, context);
-    console.log(THREE)
-    console.log(window.THREE)
-
 
     // NOTE: construct the position vectors in the constructors, because if we use 'new' within render,
     // React will think that things have changed when they have not.
     //this.cameraPosition = new THREE.Vector3(0, 0, 8)
 
-
     // set stats
-    this.createStats()
+    this.setStats()
 
     // set viewport dimensions
     this.viewportWidth = window.innerWidth; // canvas width
@@ -61,7 +59,7 @@ class Simple extends React.Component {
     }
   }
 
-  createStats () {
+  setStats () {
     this.stats = new Stats();
     this.stats.setMode(0); // 0: fps, 1: ms
     this.stats.domElement.style.position = 'absolute';
@@ -77,14 +75,10 @@ class Simple extends React.Component {
     // set device orientation controls (device)
     function setOrientationControls(e) {
       if (!e.alpha) { return; }
-
-      window.THREE = THREE
-      var DeviceOrientationControls = require('device-orientation-controls')
       this.controls = new DeviceOrientationControls(this.camera, true);
       this.controls.connect();
       this.controls.update();
 
-      window.body.addEventListener('click', fullscreen, false);
       window.removeEventListener('deviceorientation', setOrientationControls, true);
     }
 
@@ -93,27 +87,22 @@ class Simple extends React.Component {
 
   componentDidMount() {
     // get renderer, scene and camera
-    const renderer = this.refs.react3._canvas.userData.markup.childrenMarkup[0].threeObject._renderer
+    this.renderer = this.refs.react3._canvas.userData.markup.childrenMarkup[0].threeObject._renderer
     this.scene = this.refs.scene
     this.camera = this.refs.camera.refs.camera
-    console.log(renderer, this.scene, this.camera)
+    console.log(this.renderer, this.scene, this.camera)
 
-    // set color
+    // set background color
     const bgColor = 0x000000 //0x123456
-    renderer.setClearColor(bgColor, 1.0)
+    this.renderer.setClearColor(bgColor, 1.0)
     this.fog = new THREE.Fog(bgColor, 0.1, 30)
 
-    // set orientation controls
+    // set controls
     this.setControls()
-    // window.THREE = THREE
-    // var DeviceOrientationControls = require('device-orientation-controls')
-    // this.controls = new DeviceOrientationControls(this.camera, false);
-    // this.controls.connect();
-    // this.controls.update();
 
     // set stereo effect
-    this.stereoEffect = new StereoEffect(renderer)
-    this.stereoEffect.eyeSeparation = 1;
+    this.stereoEffect = new StereoEffect(this.renderer)
+    this.stereoEffect.eyeSeparation = 0.8;
     this.stereoEffect.setSize( this.viewportWidth, this.viewportHeight );
   }
 
@@ -126,7 +115,7 @@ class Simple extends React.Component {
     this.stats.begin();
 
     // update device orientation controls
-    //this.controls.update();
+    this.controls.update();
 
     // update stereo effect
     this.stereoEffect.render(this.scene, this.camera)
@@ -140,7 +129,7 @@ class Simple extends React.Component {
         mainCamera="cameraMain" // this points to the perspectiveCamera which has the name set to "camera" below
         width={this.viewportWidth} height={this.viewportHeight}
         onAnimate={this.onAnimate.bind(this)}
-        antialias={false}
+        antialias={true}
       >
       <scene ref='scene' fog={this.fog}>
 
