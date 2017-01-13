@@ -9,7 +9,7 @@ class Grid extends React.Component {
 
     console.log('Initializing grid...')
 
-    const size = 16
+    const size = 5
 
     const geometry = (
       <planeGeometry
@@ -17,39 +17,31 @@ class Grid extends React.Component {
       />
     )
 
+    //const texture = THREE.ImageUtils.loadTexture('../../assets/img/glowsquare-green-solid.png')
     const texture = THREE.ImageUtils.loadTexture('../../assets/img/glowbox_128x128.png')
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping
     texture.repeat.set( size, size )
 
     const material = (
-      <meshBasicMaterial
+      <meshStandardMaterial
         map={texture} side={THREE.DoubleSide} transparent={true} wireframe={false}
       />
     )
 
+    this.positionsZ = []
+    for (var z = 0; z <= size; z++) {
+      this.positionsZ.push(new THREE.Vector3(0, -size / 2 + z, 0))
+    }
 
-    // for (var z = 0; z < size; z++) {
-    //
-    // }
+    this.positionsY = []
+    for (var y = 0; y <= size; y++) {
+      this.positionsY.push(new THREE.Vector3(0, 0, -size / 2 + y))
+    }
 
-
-    this.positions = [
-      new THREE.Vector3(0, -size / 2, 0),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, size / 2, 0)
-    ]
-
-    this.positions2 = [
-      new THREE.Vector3(0, 0, -size / 2),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 0, size / 2),
-    ]
-
-    this.positions3 = [
-      new THREE.Vector3(-size / 2, 0),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(size / 2, 0),
-    ]
+    this.positionsX = []
+    for (var x = 0; x <= size; x++) {
+      this.positionsX.push(new THREE.Vector3(-size / 2 + x, 0, 0))
+    }
 
 
     this.PlaneZ = (props) => {
@@ -86,15 +78,16 @@ class Grid extends React.Component {
   render() {
     return (
       <group>
-        {this.positions.map((position, index) =>
+        {this.positionsZ.map((position, index) =>
           <this.PlaneZ key={index + 'z'} position={position} />
         )}
 
-        {this.positions2.map((position, index) =>
+
+        {this.positionsY.map((position, index) =>
             <this.PlaneY key={index + 'y'} position={position} />
         )}
 
-        {this.positions3.map((position, index) =>
+        {this.positionsX.map((position, index) =>
             <this.PlaneX key={index + 'x'} position={position} />
         )}
       </group>

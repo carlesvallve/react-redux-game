@@ -6,17 +6,21 @@ import ReactDOM from 'react-dom';
 class Lights extends React.Component {
   constructor(props, context) {
     super(props, context);
+
+    this.pos1 = new THREE.Vector3(6, 6, 6)
+    this.pos2 = new THREE.Vector3(-6, -6, -6)
   }
 
   render() {
-
     return (
       <group>
-        <directionalLight color={0xFFFFFF} intensity={20} position={new THREE.Vector3(3, 3, 3)} />
-        <pointLight color={0xffffff} intensity={3} position={new THREE.Vector3(0, 1, 0)}/>
+        <pointLight color={0x0000ff} intensity={3} position={this.pos1}/>
+        <pointLight color={0xff0000} intensity={3} position={this.pos2}/>
       </group>
     )
   }
 }
 
 export default Lights
+
+// <directionalLight color={0x123456} intensity={10} position={new THREE.Vector3(3, 3, 3)} />

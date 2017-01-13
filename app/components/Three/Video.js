@@ -28,12 +28,15 @@ class Video extends React.Component {
     // create video texture
     this.videoTexture = new THREE.VideoTexture( this.video );
     this.videoTexture.minFilter =  THREE.NearestFilter
+
+    // set position
+    this.position = new THREE.Vector3(0, 3, 0)
   }
 
   render() {
 
     return (
-      <mesh position={new THREE.Vector3(0, 3, 0)}>
+      <mesh position={this.position}>
         <planeGeometry width={2} height={2 * this.ratio} />
         <meshBasicMaterial
           map={this.videoTexture}

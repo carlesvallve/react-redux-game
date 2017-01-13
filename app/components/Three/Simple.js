@@ -3,125 +3,160 @@ import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 import ReactDOM from 'react-dom';
 
+var Stats = require('stats-js')
+var OrbitControls = require('three-orbit-controls')(THREE)
+//var DeviceOrientationControls = require('device-orientation-controls')(THREE)
 var StereoEffect = require('three-stereo-effect')(THREE)
 
 
 import Camera from './Camera'
 import Lights from './Lights'
 import Grid from './Grid'
-import Video from './Video'
+import Cube from './Cube'
+
+import { randomInt } from '../../utils/utils'
 
 
 class Simple extends React.Component {
   constructor(props, context) {
     super(props, context);
+    console.log(THREE)
+    console.log(window.THREE)
 
-    console.log('Initializing Simple...', new THREE.StereoCamera())
 
-    //this.controls = new OrbitControls(this.camera)
-
-    // var size = 10;
-    // var divisions = 10;
-    //
-    // var gridHelper = new THREE.GridHelper( size, divisions );
-    // scene.add( gridHelper );
-
-    this.glowTex = THREE.ImageUtils.loadTexture('../../assets/img/glowbox_256x256.png')
-    //this.glowTex = THREE.ImageUtils.loadTexture('../../assets/img/glowsquare-purple.png')
-    this.glowTex.wrapS = this.glowTex.wrapT = THREE.RepeatWrapping
-    this.glowTex.repeat.set( 41, 41 )
-
-    // construct the position vector here, because if we use 'new' within render,
+    // NOTE: construct the position vectors in the constructors, because if we use 'new' within render,
     // React will think that things have changed when they have not.
-    this.cameraPosition = new THREE.Vector3(0, 0, 8)
-    this.lightPosition = new THREE.Vector3(2, 2, 2)
-    this.planePosition = new THREE.Vector3(0, 0, 0)
+    //this.cameraPosition = new THREE.Vector3(0, 0, 8)
 
-    //this.texture = THREE.ImageUtils.loadTexture('../../assets/img/url.png')
-    //this.renderer2 = new THREE.WebGLRenderer();
-    //console.log('>>>', this.renderer2)
 
-    // create video element
-    // this.video = document.createElement('video')
-    // //this.video.crossOrigin = ''
-    // this.video.width    = 320
-    // this.video.height   = 240
-    // this.video.autoplay = true
-    // this.video.loop = true
-    // this.video.src = '../../assets/video/snis00073_sm_w.mp4' // 'https://awspv3001.r18.com/litevideo/freepv/s/sni/snis00073/snis00073_sm_w.mp4';
-    //
-    // this.ratio = this.video.height / this.video.width
-    //
-    // // create video texture
-    // this.videoTexture = new THREE.VideoTexture( this.video );
-    // this.videoTexture.minFilter =  THREE.NearestFilter
+    // set stats
+    this.createStats()
 
-    // this.state = {
-    //   cubeRotation: new THREE.Euler(),
-    //   //cameraPosition: new THREE.Vector3(0, 1, 10)
-    // };
+    // set viewport dimensions
+    this.viewportWidth = window.innerWidth; // canvas width
+    this.viewportHeight = window.innerHeight; // canvas height
 
-    this._onAnimate = () => {
-      // we will get this callback every frame
+    // set video urls
+    const urls = [
+      'bf00282_sm_w',
+      'cnd00081_sm_w',
+      'hnd00032_sm_w',
+      'hnds00011_sm_w',
+      'kawd00498_sm_w',
+      'pxd00029_sm_w',
+      'snis00050_sm_w',
+      'snis00069_sm_w',
+      'snis00073_sm_w',
+      'soe00909_sm_w'
+    ]
 
-      // pretend cubeRotation is immutable.
-      // this helps with updates and pure rendering.
-      // React will be sure that the rotation has now updated.
-      // this.setState({
-      //   cubeRotation: new THREE.Euler(
-      //     this.state.cubeRotation.x + 0.025,
-      //     this.state.cubeRotation.y + 0.025,
-      //     0
-      //   )
-      // });
+    // generate video cubes at random locations
+    this.cubes = []
+    for (var i = 0; i < urls.length; i++) {
+      this.cubes.push({
+        position: new THREE.Vector3(randomInt(-2, 2), randomInt(-2, 2), randomInt(-2, 2)),
+        width: 1, height: 1, depth:1,
+        url: urls[i]
+      })
+    }
+  }
 
-      //Every time the video got enougth data to be display, the texture is updated and sent to the GPU.
-      // if(this.video.readyState === this.video.HAVE_ENOUGH_DATA ){
-      //   this.videoTexture.needsUpdate = true;
-      // }
+  createStats () {
+    this.stats = new Stats();
+    this.stats.setMode(0); // 0: fps, 1: ms
+    this.stats.domElement.style.position = 'absolute';
+    this.stats.domElement.style.left = '0px';
+    this.stats.domElement.style.top = '0px';
+    document.body.appendChild( this.stats.domElement );
+  }
 
-      this.stereoEffect.render(this.myScene, this.myCamera)
-    };
+  setControls() {
+    // set orbital controls (desktop)
+    this.controls = new OrbitControls(this.camera);
+
+    // set device orientation controls (device)
+    function setOrientationControls(e) {
+      if (!e.alpha) { return; }
+
+      window.THREE = THREE
+      var DeviceOrientationControls = require('device-orientation-controls')
+      this.controls = new DeviceOrientationControls(this.camera, true);
+      this.controls.connect();
+      this.controls.update();
+
+      window.body.addEventListener('click', fullscreen, false);
+      window.removeEventListener('deviceorientation', setOrientationControls, true);
+    }
+
+    window.addEventListener('deviceorientation', setOrientationControls, true);
   }
 
   componentDidMount() {
+    // get renderer, scene and camera
     const renderer = this.refs.react3._canvas.userData.markup.childrenMarkup[0].threeObject._renderer
-    console.log('React3 renderer:', renderer) //canvas.userData.markup.childrenMarkup[0].threeObject._renderer);
-    renderer.setClearColor(0xffffff, 1.0)
+    this.scene = this.refs.scene
+    this.camera = this.refs.camera.refs.camera
+    console.log(renderer, this.scene, this.camera)
 
+    // set color
+    const bgColor = 0x000000 //0x123456
+    renderer.setClearColor(bgColor, 1.0)
+    this.fog = new THREE.Fog(bgColor, 0.1, 30)
+
+    // set orientation controls
+    this.setControls()
+    // window.THREE = THREE
+    // var DeviceOrientationControls = require('device-orientation-controls')
+    // this.controls = new DeviceOrientationControls(this.camera, false);
+    // this.controls.connect();
+    // this.controls.update();
+
+    // set stereo effect
     this.stereoEffect = new StereoEffect(renderer)
-    this.stereoEffect.eyeSeparation = 10;
-    this.stereoEffect.setSize( window.innerWidth, window.innerHeight );
-    //
-    // console.log(stereoEffect)
-    this.myScene = this.refs.scene
-    this.myCamera = this.refs.camera.refs.cameraL
-    console.log(this.myScene, this.myCamera)
+    this.stereoEffect.eyeSeparation = 1;
+    this.stereoEffect.setSize( this.viewportWidth, this.viewportHeight );
+  }
+
+  componentWillUnmount() {
+    this.controls.dispose();
+    delete this.controls;
+  }
+
+  onAnimate() {
+    this.stats.begin();
+
+    // update device orientation controls
+    //this.controls.update();
+
+    // update stereo effect
+    this.stereoEffect.render(this.scene, this.camera)
+    this.stats.end();
   }
 
   render() {
-    const width = window.innerWidth; // canvas width
-    const height = window.innerHeight; // canvas height
-
-    //console.log(THREE.Math.degToRad(90))
-
-    //let renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: true });
-
     return (
-
       <React3
         ref="react3"
-        mainCamera="cameraL" // this points to the perspectiveCamera which has the name set to "camera" below
-        width={width} height={height}
-        onAnimate={this._onAnimate}
+        mainCamera="cameraMain" // this points to the perspectiveCamera which has the name set to "camera" below
+        width={this.viewportWidth} height={this.viewportHeight}
+        onAnimate={this.onAnimate.bind(this)}
         antialias={false}
       >
-      <scene ref='scene'>
+      <scene ref='scene' fog={this.fog}>
 
-        <Camera ref='camera' renderer={this.renderer} />
+        <Camera ref='camera' renderer={this.renderer} width={this.viewportWidth} height={this.viewportHeight}/>
         <Lights />
         <Grid />
-        <Video />
+
+        {this.cubes.map((data, index) =>
+          <Cube key={'cube' + index}
+            position={data.position} // this is blah blah
+            width={data.width}
+            height={data.height}
+            depth={data.depth}
+            url={data.url}
+          />
+        )}
 
       </scene>
     </React3>);
@@ -129,19 +164,3 @@ class Simple extends React.Component {
 }
 
 export default Simple
-
-//ReactDOM.render(<Simple/>, document.body);
-
-//fog={new THREE.Fog( 0x000000, 0.1, 30 )}
-
-// <mesh
-//   rotation={this.state.cubeRotation}
-//   position = {new THREE.Vector3(-5, 3, 0)}
-// >
-//   <boxGeometry
-//     width={1}
-//     height={1}
-//     depth={1}
-//   />
-//   <meshBasicMaterial map={this.videoTexture} />
-// </mesh>
