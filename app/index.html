@@ -12,11 +12,16 @@
   		margin:0;
   		padding:0;
   	}
+    #either-gif-or-video video { display: none; }
+    @media (-webkit-video-playable-inline) {
+        #either-gif-or-video img { display: none; }
+        #either-gif-or-video video { display: none; }
+    }
   </style>
 </head>
 
 <body>
   <div id="root"></div>
-  <script src="./bundle.js?v=2"></script>
+  <script src="./bundle.js?v=3"></script>
 </body>
 </html>

@@ -20,7 +20,7 @@ class Grid extends React.Component {
     texture.repeat.set( size, size )
 
     const material = (
-      <meshStandardMaterial
+      <meshBasicMaterial
         map={texture} side={THREE.DoubleSide} transparent={true} wireframe={false}
       />
     )

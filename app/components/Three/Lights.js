@@ -12,9 +12,10 @@ class Lights extends React.Component {
   }
 
   render() {
+
     return (
       <group>
-        <pointLight color={0x0000ff} intensity={3} position={this.pos1}/>
+        <pointLight color={0x00ffff} intensity={3} position={this.pos1}/>
         <pointLight color={0xff0000} intensity={3} position={this.pos2}/>
       </group>
     )

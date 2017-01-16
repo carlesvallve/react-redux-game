@@ -9,43 +9,62 @@ class Cube extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    this.videos = []
+
     // set video texture
-    this.videoTexture = this.createVideoTexture('/vr-assets/video/' + props.url + '.mp4')
+    this.setVideoTexture('/vr-assets/video/' + props.url + '.mp4')
   }
 
-  createVideoTexture(url) {
+  setVideoTexture(url) {
     // create video element
-    const video = document.createElement('video')
+    this.video = document.createElement('video')
 
     //video.crossOrigin = ''
-    video.width    = 240
-    video.height   = 240
-    video.autoplay = true
-    video.loop = true
-    video.src = url
+    this.video.width    = 240
+    this.video.height   = 240
+    this.video.autoplay = true
+    this.video.loop = true
+    this.video.playsInline = true
+    this.video.muted = true
+    this.video.src = url
 
     // create video texture
-    const videoTexture = new THREE.VideoTexture(video);
-    videoTexture.minFilter =  THREE.NearestFilter
+    this.videoTexture = new THREE.VideoTexture(this.video);
+    this.videoTexture.minFilter =  THREE.NearestFilter
+
+    //this.video.currentTime = Math.random() * this.video.duration
+    //this.video.play()
 
     // set currentTime once readyState is available
-    var i = setInterval(function() {
-    	if(video.readyState > 0) {
-        video.currentTime = Math.random() * video.duration
-    		clearInterval(i);
-    	}
-    }, 100);
-
-    return videoTexture
+    // var that = this
+    // var i = setInterval(function() {
+    // 	if(that.video.readyState > 0) {
+    //     that.video.currentTime = Math.random() * that.video.duration
+    // 		clearInterval(i);
+    // 	}
+    // }, 100);
   }
+
+  componentWillReceiveProps(newProps) {
+    console.log('video receiving props', this.video)
+    this.video.currentTime = Math.random() * this.video.duration
+    this.video.play()
+  }
+
+  // componentDidUpdate() {
+  //   this.video.currentTime += 100
+  // }
+
 
   render() {
 
+    //this.video.currentTime = Math.random() * this.video.duration
 
+    console.log('rendering video...', this.video)
     return (
       <mesh position={this.props.position}>
         <boxGeometry width={this.props.width} height={this.props.height} depth={this.props.depth}/>
-        <meshStandardMaterial
+        <meshBasicMaterial
           map={this.videoTexture} side={THREE.DoubleSide}
 
 

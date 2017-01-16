@@ -3,14 +3,14 @@ import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 import ReactDOM from 'react-dom';
 
-window.THREE = THREE // we need to do this in order to use DeviceOrientationControls, sadly
+//window.THREE = THREE // we need to do this in order to use DeviceOrientationControls, sadly
 
 var Stats = require('stats-js')
 var OrbitControls = require('three-orbit-controls')(THREE)
-var DeviceOrientationControls = require('device-orientation-controls')
+//var DeviceOrientationControls = require('device-orientation-controls')
 var StereoEffect = require('three-stereo-effect')(THREE)
 
-
+import Ui from './Ui'
 import Camera from './Camera'
 import Lights from './Lights'
 import Grid from './Grid'
@@ -33,6 +33,7 @@ class Simple extends React.Component {
     // set viewport dimensions
     this.viewportWidth = window.innerWidth; // canvas width
     this.viewportHeight = window.innerHeight; // canvas height
+    //this.fog = new THREE.Fog(0x000000, 0.1, 50)
 
     // set video urls
     const urls = [
@@ -54,8 +55,15 @@ class Simple extends React.Component {
       this.cubes.push({
         position: new THREE.Vector3(randomInt(-2, 2), randomInt(-2, 2), randomInt(-2, 2)),
         width: 1, height: 1, depth:1,
-        url: urls[i]
+        url: urls[i],
+        playing: false,
+        playTime: 0
       })
+    }
+
+    console.log('initializing cubes data...', this.cubes)
+    this.state = {
+      cubes: this.cubes
     }
   }
 
@@ -73,16 +81,16 @@ class Simple extends React.Component {
     this.controls = new OrbitControls(this.camera);
 
     // set device orientation controls (device)
-    function setOrientationControls(e) {
-      if (!e.alpha) { return; }
-      this.controls = new DeviceOrientationControls(this.camera, true);
-      this.controls.connect();
-      this.controls.update();
-
-      window.removeEventListener('deviceorientation', setOrientationControls, true);
-    }
-
-    window.addEventListener('deviceorientation', setOrientationControls, true);
+    // function setOrientationControls(e) {
+    //   if (!e.alpha) { return; }
+    //   this.controls = new DeviceOrientationControls(this.camera, true);
+    //   this.controls.connect();
+    //   this.controls.update();
+    //
+    //   window.removeEventListener('deviceorientation', setOrientationControls, true);
+    // }
+    //
+    // window.addEventListener('deviceorientation', setOrientationControls, true);
   }
 
   componentDidMount() {
@@ -93,9 +101,10 @@ class Simple extends React.Component {
     console.log(this.renderer, this.scene, this.camera)
 
     // set background color
-    const bgColor = 0x000000 //0x123456
-    this.renderer.setClearColor(bgColor, 1.0)
-    this.fog = new THREE.Fog(bgColor, 0.1, 30)
+    this.setBgColor(0x000000)
+    // const bgColor = 0x000000 //0x123456
+    // this.renderer.setClearColor(bgColor, 1.0)
+    // this.fog = new THREE.Fog(bgColor, 0.1, 30)
 
     // set controls
     this.setControls()
@@ -115,41 +124,84 @@ class Simple extends React.Component {
     this.stats.begin();
 
     // update device orientation controls
-    this.controls.update();
+    //this.controls.update();
+
+    // set video cubes in playing state
+    for (var i = 0; i < this.cubes.length; i++) {
+      this.cubes.playTime+=1
+    }
+
+    this.setState({ cubes: this.cubes })
 
     // update stereo effect
     this.stereoEffect.render(this.scene, this.camera)
     this.stats.end();
   }
 
+  onClick() {
+    console.log('clicking on viewport...')
+
+    // set bg color
+    this.setBgColor(0xffffff)
+
+    // set video cubes in playing state
+    for (var i = 0; i < this.cubes.length; i++) {
+      this.cubes.playing=true
+    }
+
+    this.setState({ cubes: this.cubes })
+  }
+
+  setBgColor(bgColor) {
+    this.renderer.setClearColor(bgColor, 1.0)
+    this.fog = null //new THREE.Fog(bgColor, 0.1, 50)
+  }
+
   render() {
+    console.log('rendering simple')
     return (
-      <React3
-        ref="react3"
-        mainCamera="cameraMain" // this points to the perspectiveCamera which has the name set to "camera" below
-        width={this.viewportWidth} height={this.viewportHeight}
-        onAnimate={this.onAnimate.bind(this)}
-        antialias={true}
-      >
-      <scene ref='scene' fog={this.fog}>
+      <div onClick={this.onClick.bind(this)}>
+        <React3
+          ref="react3"
+          mainCamera="cameraMain" // this points to the perspectiveCamera which has the name set to "camera" below
+          width={this.viewportWidth} height={this.viewportHeight}
+          onAnimate={this.onAnimate.bind(this)}
+          antialias={true}
+        >
+        <scene ref='scene' fog={this.fog}>
 
-        <Camera ref='camera' renderer={this.renderer} width={this.viewportWidth} height={this.viewportHeight}/>
-        <Lights />
-        <Grid />
+          <Camera ref='camera' renderer={this.renderer} width={this.viewportWidth} height={this.viewportHeight}/>
+          <Lights />
+          <Grid />
 
-        {this.cubes.map((data, index) =>
-          <Cube key={'cube' + index}
-            position={data.position} // this is blah blah
-            width={data.width}
-            height={data.height}
-            depth={data.depth}
-            url={data.url}
-          />
-        )}
+          {this.cubes.map((data, index) =>
+            <Cube key={'cube' + index}
+              position={data.position}
+              width={data.width}
+              height={data.height}
+              depth={data.depth}
+              url={data.url}
+              playing={data.playing}
+            />
+          )}
 
-      </scene>
-    </React3>);
+        </scene>
+      </React3>
+
+
+    </div>
+    )
   }
 }
 
 export default Simple
+
+
+// <button
+//   style={{ position: 'absolute', top: '20px', left: '100px' }}
+//   onClick={this.onPlayVideos.bind(this)}
+// >Hey I'm a button!</button>
+//
+// <Ui>
+//
+// </Ui>
