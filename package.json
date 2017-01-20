@@ -44,6 +44,7 @@
     "style-loader": "^0.13.1",
     "swiper": "^3.3.1",
     "three": "^0.83.0",
+    "three-firstperson-vr-controls": "^0.1.0",
     "three-orbit-controls": "^82.1.0",
     "three-stereo-effect": "^1.0.14",
     "url-loader": "^0.5.7",

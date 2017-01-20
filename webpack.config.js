@@ -1,16 +1,16 @@
 var webpack = require('webpack');
 
 module.exports = {
-  entry: ['babel-polyfill', './app/main.js'],
+  entry: ['babel-polyfill', './vr-demo/main.js'], // './app/main.js'
 
   output: {
-      path: './splitex/path/to',
+      path: './build',
       filename: 'bundle.js'
   },
 
   devServer: {
       inline: true,
-      contentBase: './app',
+      contentBase: './vr-demo',
       port: 1234
   },
 
